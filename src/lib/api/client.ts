@@ -1,16 +1,20 @@
+import { ngrokSkipBrowserWarningHeaders } from './ngrok'
+
 const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/v1'
 
-function buildHeaders() {
+function buildHeaders(includeJsonContentType: boolean) {
   const token = localStorage.getItem('wms_access_token')
   return {
-    'Content-Type': 'application/json',
+    ...(includeJsonContentType ? { 'Content-Type': 'application/json' } : {}),
+    ...ngrokSkipBrowserWarningHeaders(),
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
   }
 }
 
 export async function apiGet<T>(path: string): Promise<T> {
   const response = await fetch(`${baseUrl}${path}`, {
-    headers: buildHeaders(),
+    // Do not set Content-Type on GET — it triggers stricter CORS preflights and is unnecessary.
+    headers: buildHeaders(false),
   })
   if (!response.ok) {
     throw new Error(`Request failed: ${response.status}`)
@@ -21,7 +25,7 @@ export async function apiGet<T>(path: string): Promise<T> {
 export async function apiPost<TResponse, TBody>(path: string, body: TBody): Promise<TResponse> {
   const response = await fetch(`${baseUrl}${path}`, {
     method: 'POST',
-    headers: buildHeaders(),
+    headers: buildHeaders(true),
     body: JSON.stringify(body),
   })
   if (!response.ok) {
@@ -33,7 +37,7 @@ export async function apiPost<TResponse, TBody>(path: string, body: TBody): Prom
 export async function apiPut<TResponse, TBody>(path: string, body: TBody): Promise<TResponse> {
   const response = await fetch(`${baseUrl}${path}`, {
     method: 'PUT',
-    headers: buildHeaders(),
+    headers: buildHeaders(true),
     body: JSON.stringify(body),
   })
   if (!response.ok) {
@@ -45,7 +49,7 @@ export async function apiPut<TResponse, TBody>(path: string, body: TBody): Promi
 export async function apiDelete(path: string): Promise<void> {
   const response = await fetch(`${baseUrl}${path}`, {
     method: 'DELETE',
-    headers: buildHeaders(),
+    headers: buildHeaders(false),
   })
   if (!response.ok) {
     throw new Error(`Request failed: ${response.status}`)

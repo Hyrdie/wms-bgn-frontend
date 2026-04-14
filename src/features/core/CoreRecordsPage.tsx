@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useMemo, useState } from 'react'
 
 import { apiDelete, apiGet, apiPost, apiPut } from '../../lib/api/client'
+import { ngrokSkipBrowserWarningHeaders } from '../../lib/api/ngrok'
 import { endpoints } from '../../lib/api/endpoints'
 import { useEnvironmentStore } from '../../store/environmentStore'
 import { Button } from '../../components/ui/Button'
@@ -78,7 +79,10 @@ export function CoreRecordsPage() {
     const response = await fetch(
       `${import.meta.env.VITE_API_BASE_URL}${endpoints.core.export}?${params.toString()}`,
       {
-        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+        headers: {
+          ...ngrokSkipBrowserWarningHeaders(),
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
       },
     )
     if (!response.ok) return

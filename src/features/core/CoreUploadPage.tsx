@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
 
+import { ngrokSkipBrowserWarningHeaders } from '../../lib/api/ngrok'
 import { endpoints } from '../../lib/api/endpoints'
 import { useEnvironmentStore } from '../../store/environmentStore'
 import { Button } from '../../components/ui/Button'
@@ -34,7 +35,10 @@ export function CoreUploadPage() {
       form.append('environment', environment)
       const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}${endpoints.core.upload}`, {
         method: 'POST',
-        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+        headers: {
+          ...ngrokSkipBrowserWarningHeaders(),
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         body: form,
       })
       if (!response.ok) throw new Error(`Upload failed: ${response.status}`)

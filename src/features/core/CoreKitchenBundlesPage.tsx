@@ -46,6 +46,16 @@ export function CoreKitchenBundlesPage() {
       <p className="text-sm text-slate-500">
         Focus view: check missing items quickly, then open details to fill serial numbers.
       </p>
+      {kitchens.isError || bundles.isError ? (
+        <p className="text-sm text-rose-600">
+          Failed to load kitchens/bundles:{' '}
+          {(kitchens.error as Error | undefined)?.message ??
+            (bundles.error as Error | undefined)?.message ??
+            'Unknown error'}
+          . Check Vercel <code className="rounded bg-slate-100 px-1">VITE_API_BASE_URL</code> and backend CORS
+          (include your Vercel origin or use preview-safe CORS).
+        </p>
+      ) : null}
       <div className="space-y-2">
         {(bundles.data ?? []).map((bundle) => (
           <BundleRow
