@@ -4,8 +4,8 @@ import { EnvironmentSwitcher } from '../components/shared/EnvironmentSwitcher'
 const navItems = [
   { label: 'Dashboard', to: '/' },
   { label: 'Upload Master Data', to: '/core/upload' },
-  { label: 'SPPG/Kitchens', to: '/core/overview' },
   { label: 'Master Data Records', to: '/core/records' },
+  { label: 'SPPG/Kitchens', to: '/core/overview' },
 ]
 
 export function AppLayout() {

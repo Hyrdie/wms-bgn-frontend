@@ -6,7 +6,7 @@ export function EnvironmentSwitcher() {
 
   return (
     <div className="flex items-center gap-2 text-sm">
-      <span className="text-slate-600">Item Status:</span>
+      <span className="text-slate-600">Kitchen data scope:</span>
       <select
         className="rounded-md border border-slate-300 px-2 py-1"
         value={environment}

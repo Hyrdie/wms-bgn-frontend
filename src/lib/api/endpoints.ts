@@ -9,5 +9,6 @@ export const endpoints = {
     kitchenScan: '/core/kitchens',
     kitchenItemsSave: '/core/kitchens',
     export: '/core/export',
+    recordPhoto: (recordId: number) => `/core/records/${recordId}/photo`,
   },
 }

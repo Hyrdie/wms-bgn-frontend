@@ -7,7 +7,15 @@ import { useEnvironmentStore } from '../../store/environmentStore'
 import { Button } from '../../components/ui/Button'
 import { Card } from '../../components/ui/Card'
 
-const ITEM_TYPES = ['SPPG', 'CCTV', 'Digital signage + bracket', 'Router', 'Switch', 'PVR Kitchen'] as const
+const ITEM_TYPES = [
+  'SPPG',
+  'CCTV',
+  'Digital signage + bracket',
+  'Router',
+  'Switch',
+  'PVR Kitchen',
+  'Laptop',
+] as const
 
 type UploadResponse = {
   total_rows: number
