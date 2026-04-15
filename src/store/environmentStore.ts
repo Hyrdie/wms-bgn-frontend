@@ -1,11 +1,10 @@
 import { create } from 'zustand'
 
+/** Backend `environment` query param; fixed default (no UI switcher). */
 type EnvState = {
   environment: 'staging' | 'imple'
-  setEnvironment: (value: 'staging' | 'imple') => void
 }
 
-export const useEnvironmentStore = create<EnvState>((set) => ({
+export const useEnvironmentStore = create<EnvState>(() => ({
   environment: 'staging',
-  setEnvironment: (value) => set({ environment: value }),
 }))

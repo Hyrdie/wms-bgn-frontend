@@ -1,5 +1,4 @@
 import { NavLink, Outlet } from 'react-router-dom'
-import { EnvironmentSwitcher } from '../components/shared/EnvironmentSwitcher'
 
 const navItems = [
   { label: 'Dashboard', to: '/' },
@@ -30,13 +29,8 @@ export function AppLayout() {
         </aside>
         <main className="space-y-4">
           <header className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-            <div className="flex items-center justify-between gap-3">
-              <div>
-                <div className="text-lg font-semibold">Warehouse Management System</div>
-                <p className="text-sm text-slate-500">Kitchen deployment workflow</p>
-              </div>
-              <EnvironmentSwitcher />
-            </div>
+            <div className="text-lg font-semibold">Warehouse Management System</div>
+            <p className="text-sm text-slate-500">Kitchen deployment workflow</p>
           </header>
           <Outlet />
         </main>

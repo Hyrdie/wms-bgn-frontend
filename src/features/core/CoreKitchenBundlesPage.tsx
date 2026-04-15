@@ -42,7 +42,7 @@ export function CoreKitchenBundlesPage() {
 
   return (
     <Card className="space-y-4">
-      <h2 className="text-lg font-semibold">Kitchen / Bundle Overview ({environment})</h2>
+      <h2 className="text-lg font-semibold">Kitchen / Bundle Overview</h2>
       <p className="text-sm text-slate-500">
         Focus view: check missing items quickly, then open details to fill serial numbers.
       </p>
