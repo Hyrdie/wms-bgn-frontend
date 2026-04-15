@@ -26,6 +26,16 @@ type UploadResponse = {
   errors: number
 }
 
+function resultSummary(result: UploadResponse) {
+  return [
+    `${result.total_rows} rows processed`,
+    `${result.upserted_assets} assets upserted`,
+    `${result.created_kitchens} kitchens created`,
+    `${result.created_bundles} bundles created`,
+    `${result.created_bgn} BGN records created`,
+  ].join(' • ')
+}
+
 export function CoreUploadPage() {
   const environment = useEnvironmentStore((state) => state.environment)
   const [itemType, setItemType] = useState<(typeof ITEM_TYPES)[number]>('CCTV')
@@ -49,7 +59,16 @@ export function CoreUploadPage() {
         },
         body: form,
       })
-      if (!response.ok) throw new Error(`Upload failed: ${response.status}`)
+      if (!response.ok) {
+        let detail = ''
+        try {
+          const body = (await response.json()) as { detail?: string }
+          detail = body.detail ? ` - ${body.detail}` : ''
+        } catch {
+          detail = ''
+        }
+        throw new Error(`Upload failed (${response.status})${detail}`)
+      }
       return (await response.json()) as UploadResponse
     },
     onSuccess: (data) => {
@@ -85,9 +104,20 @@ export function CoreUploadPage() {
           {upload.isPending ? 'Uploading...' : 'Upload'}
         </Button>
       </div>
+      {upload.isPending ? (
+        <div className="rounded-md border border-sky-200 bg-sky-50 px-3 py-2 text-sm text-sky-800">Uploading file… please wait.</div>
+      ) : null}
       {error ? <p className="text-sm text-rose-600">{error}</p> : null}
       {result ? (
-        <pre className="overflow-auto rounded bg-slate-50 p-3 text-xs">{JSON.stringify(result, null, 2)}</pre>
+        <div
+          className={`rounded-md border px-3 py-2 text-sm ${
+            result.errors > 0 ? 'border-amber-200 bg-amber-50 text-amber-900' : 'border-emerald-200 bg-emerald-50 text-emerald-900'
+          }`}
+        >
+          <p className="font-medium">{result.errors > 0 ? 'Upload completed with warnings.' : 'Upload successful.'}</p>
+          <p className="mt-1 text-xs opacity-90">{resultSummary(result)}</p>
+          {result.errors > 0 ? <p className="mt-1 text-xs">Rows with errors: {result.errors}</p> : null}
+        </div>
       ) : null}
     </Card>
   )
